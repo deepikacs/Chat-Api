@@ -1,4 +1,3 @@
-
 const bcrypt = require('bcryptjs');
 
 const jwt = require('jsonwebtoken');
@@ -77,18 +76,39 @@ exports.login = (req, res, next) => {
 
 }
 
-exports.search = (req, res, next) => {
+exports.searchdata = (req, res, next) => {
     var username = req.body.username;
     userModel.findOne({ username: username })
         .then(result => {
             console.log(result);
             res.status(200).json({
                 message: 'search successful',
-                result: result.name
+                result: result
 
             })
           
         })
+
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.getAlluserdetails = (req, res, next) => {
+    userModel.find()
+        .then(result => {
+            console.log(result);
+            res.status(200).json({
+                message: 'get all details',
+                result: result
+
+            })
+          
+        })
+        
         .catch(err => {
             if (!err.statusCode) {
                 err.statusCode = 500;
