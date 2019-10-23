@@ -243,3 +243,38 @@ exports.updateForm =(req,res) => {
 
 //     })
 // }
+
+// searching information
+
+exports.searchinfo=(req,res)=>{
+    let {serachText}=req.body;
+    if(serachText && serachText.trim()){
+
+   
+
+    req.body.serachText = req.body.serachText.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, "\\$&");
+    userformModel.find({
+        $or:[
+            {"Name":{ $regex:req.body.serachText, $options: 'i' }},
+            {"email":{$regex:req.body.serachText, $options: 'i' }},
+            {"password":{$regex:req.body.serachText, $options: 'i'}}
+        ]
+    })
+    .then(result=>{
+        console.log(result);
+        res.status(200).json({
+            message: 'search successful',
+            result: result
+
+        }) 
+    }) 
+    }
+    else{
+        res.status(200).json({
+            message: 'mandatory fields are missing',
+            result: [],
+            statusCode:400
+
+        }) 
+    } 
+}

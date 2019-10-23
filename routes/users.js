@@ -30,6 +30,7 @@ router.post('/simpleformsubmit',UsersController.simpleFormSubmit)
 router.post('/updateuser',UsersController.updateForm);
 router.get('/getAllUser',UsersController.getallUsers);
 router.get('/getIDByUser/:id',UsersController.getIDByUser);
+router.post('/search',UsersController.searchinfo);
 
 
 
