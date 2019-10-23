@@ -2,10 +2,9 @@ const bcrypt = require('bcryptjs');
 
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/user');
+const userformModel=require('../models/simpleform');
 
 exports.singup = (req, res, next) => {
-
-
     const email = req.body.email;
     const mobileno = req.body.mobileno;
     const name = req.body.name;
@@ -117,3 +116,130 @@ exports.getAlluserdetails = (req, res, next) => {
         })
 }
 
+// exports.updateForm =(req,res,next) => {
+//     const id = req.body._id;
+//     const updateOps = {};
+
+//     for( const ops of req.body) {
+//         updateOps[ops.PropName]=ops.value;
+//     }
+
+//     userModel.update({_id:id},{$set:updateOps})
+//     exec()
+//     .then(result =>{
+//         console.log(result);
+//         res.status(200).json(result);
+//     })
+//     .catch(err =>{
+//         console.log(err);
+//         res.status(500).json({
+//             error:err
+//         })
+        
+//     });
+// }
+
+
+// update form in chat-React project
+exports.simpleFormSubmit=(req,res,next)=>{
+    debugger;
+    // console.log(req.body);
+const name=req.body.Name;
+const email=req.body.email;
+const password=req.body.password;
+
+const user=new userformModel({
+    Name:name,
+    email:email,
+    password:password
+})
+// console.log(user);
+return user.save()
+.then(result=>{
+    console.log(result);
+    res.status(200).json({
+        message:"Form submitted successful",
+        user_id:result._id
+
+    })
+})
+.catch(err=>{
+    if(!err.statusCode){
+        err.statusCode=500;
+    }
+    next(err);
+})
+}
+
+exports.getallUsers=(req,res,next)=>{
+    userformModel.find()
+    .then(result=>{
+        console.log(result);
+        res.status(200).json({
+            message: 'list of register user',
+            result: result
+
+        }) 
+    })  
+}
+
+exports.getIDByUser=(req,res,next)=>{
+    userformModel.findById({_id: req.params.id})
+    .then(result=>{
+        console.log(result);
+        res.status(200).json({
+            message: 'user based on id',
+            result: result
+
+        }) 
+    })  
+}
+
+exports.updateForm =(req,res) => {
+    debugger;
+    console.log(req.body)
+    const id = req.body.id;
+    userformModel.update({_id:id},{$set:{
+        
+        Name:req.body.name,
+        email:req.body.email,
+        password:req.body.password
+    }})
+    .then(result =>{
+        console.log(result);
+        res.status(200).json(result);
+    })
+    .catch(err =>{
+        console.log(err);
+        res.status(500).json({
+            error:err
+        })
+        
+    });
+}
+
+
+// exports.updateForm = (req, res) => {
+//     const id = req.body.id;
+//     userformModel.findById({ _id: id }, function (err, employee) {
+
+//         if (!employee) {
+//             return next(new Error('Could not load Document'));
+//         }
+//         else {
+//             employee.Name = req.body.Name;
+//             employee.email = req.body.email;
+//             employee.password = req.body.password;
+//             employee.save().then(employee => {
+//                 res.json('Successfully Updated');
+//             })
+//                 .catch(err => {
+//                     res.status(400).send("unable to update the database");
+//                 });
+
+
+
+//         }
+
+//     })
+// }

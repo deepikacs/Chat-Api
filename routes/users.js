@@ -24,6 +24,12 @@ router.post('/signup',[
 router.post('/login',UsersController.login);
 router.post('/searchdata',UsersController.searchdata);
 router.get('/getall',UsersController.getAlluserdetails);
+// router.patch('/_id',UsersController.updateForm);
+
+router.post('/simpleformsubmit',UsersController.simpleFormSubmit)
+router.post('/updateuser',UsersController.updateForm);
+router.get('/getAllUser',UsersController.getallUsers);
+router.get('/getIDByUser/:id',UsersController.getIDByUser);
 
 
 
